@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 
 export default class Register extends Component {
     constructor(props) {
@@ -6,11 +7,13 @@ export default class Register extends Component {
 
         this.onChangeUsername = this.onChangeUsername.bind(this);
         this.onChangePassword = this.onChangePassword.bind(this);
+        this.onChangeName = this.onChangeName.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
 
         this.state = {
             username: '',
             password: '',
+            name: '',
         }
     }
 
@@ -26,10 +29,26 @@ export default class Register extends Component {
         });
     }
 
+    onChangeName(e) {
+        this.setState({
+            name: e.target.value
+        });
+    }
+
     onSubmit(e) {
         e.preventDefault();
 
         console.log(this.state);
+
+        const registerData = {
+            'username': this.state.username,
+            'password': this.state.password,
+            'name': this.state.name,
+        }
+
+        axios.post('http://localhost:4000/register', registerData)
+            .then(res => alert(res.data.message))
+            .catch(err => alert(err.data));
 
         this.state = {
             username: '',
@@ -62,6 +81,15 @@ export default class Register extends Component {
                                             name="password"
                                             value={this.state.password}
                                             onChange={this.onChangePassword}></input>
+                                </div>
+                                <div className="form-group">
+                                    <label htmlFor="name">Full Name</label>
+                                    <input  type="text" 
+                                            className="form-control" 
+                                            id="name" 
+                                            name="name"
+                                            value={this.state.name}
+                                            onChange={this.onChangeName}></input>
                                 </div>
                                 <button type="submit" className="col btn btn-primary">Register</button>
                                 <a href="/" className="col btn btn-link text-center mt-4">Login</a>

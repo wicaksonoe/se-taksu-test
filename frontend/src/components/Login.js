@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 
 export default class Login extends Component {
     constructor(props) {
@@ -30,6 +31,15 @@ export default class Login extends Component {
         e.preventDefault();
 
         console.log(this.state);
+
+        const loginData = {
+            'username': this.state.username,
+            'password': this.state.password,
+        }
+
+        axios.post('http://localhost:4000/login', loginData)
+            .then(res => alert(res.data))
+            .catch(err => alert('Failed login'));
 
         this.state = {
             username: '',
